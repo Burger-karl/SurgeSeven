@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Admin Truck List Page{% endblock title %}
+    
+{% block banner-slider %}
+
+    <section class="breadcrumbs">
+        <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Truck</h2>
+            <ol>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li>Truck</li>
+            </ol>
+        </div>
+
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block main-content %}
+<h1>Pending Truck Approvals</h1>
+
+<br>
+
+{% if trucks %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Approve Selected Trucks</button>
+    </form>
+
+    <br>
+    <hr>
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th class="text-warning">Truck Name</th>
+                <th class="text-warning">Owner</th>
+                <th class="text-warning">Weight Range</th>
+                <th class="text-warning">Image</th>
+                <th class="text-warning">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for truck in trucks %}
+            <tr>
+                <td class="text-warning">{{ truck.name }}</td>
+                <td class="text-warning">{{ truck.owner.username }}</td>
+                <td class="text-warning">{{ truck.get_weight_range_display }}</td>
+                <td>
+                    <img src="{{ truck.image.url }}" alt="{{ truck.name }}" width="100">
+                </td>
+                <td>
+                    <a href="{% url 'admin_truck_detail' truck.id %}" class="btn btn-info">View Details</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No trucks pending approval.</p>
+{% endif %}
+
+{% endblock %}
