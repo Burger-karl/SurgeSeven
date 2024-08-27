@@ -1,3 +1,4 @@
+from django.views.generic import ListView
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views import View
@@ -9,10 +10,19 @@ from delivery.models import DeliverySchedule, DeliveryHistory
 
 # Create your views here.
 
-@method_decorator(login_required,name='dispatch')
-class HomeView(View):
-    def get(self, request):
-        return render(request, 'dashboard/home.html')
+
+@method_decorator(login_required, name='dispatch')
+class HomeView(ListView):
+    model = Truck
+    template_name = 'dashboard/home.html'
+    context_object_name = 'available_trucks'
+
+    def get_queryset(self):
+        return Truck.objects.filter(available=True).only('image', 'weight_range')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
 
 
 @method_decorator(login_required,name='dispatch')

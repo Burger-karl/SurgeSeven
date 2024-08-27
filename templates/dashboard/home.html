@@ -111,8 +111,42 @@
 
 {% block main-content %}
 
-     <!-- ======= Menu Section ======= -->
-     <section id="menu" class="menu section-bg">
+
+    <!-- ======= Trucks Section ======= -->
+    <section id="testimonials" class="testimonials section-bg">
+        <div class="container" data-aos="fade-up">
+
+            <div class="section-title">
+                <h2>Available Trucks</h2>
+                <p>Explore our fleet of available trucks</p>
+            </div>
+
+            <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
+                <div class="swiper-wrapper">
+
+                    {% for truck in available_trucks %}
+                    <div class="swiper-slide">
+                        <div class="truck-item">
+                            <img src="{{ truck.image.url }}" class="truck-img" alt="Truck Image">
+                            <h3>{{ truck.weight_range }}</h3>
+                        </div>
+                    </div><!-- End truck item -->
+                    {% endfor %}
+
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+
+        </div>
+    </section>
+    <!-- ======= End Trucks Section ======= -->
+
+
+
+
+
+    <!-- ======= Menu Section ======= -->
+    <section id="menu" class="menu section-bg">
         <div class="container" data-aos="fade-up">
 
             <div class="section-title">
