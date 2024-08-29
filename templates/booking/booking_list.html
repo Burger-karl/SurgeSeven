@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Bookings List Page{% endblock title %}
+    
+{% block banner-slider %}
+    <section class="breadcrumbs">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>Bookings</h2>
+                <ol>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li>Bookings</li>
+                </ol>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block main-content %}
+<div class="container mt-5">
+    <h2 class="text-center">Your Pending <span class="text-warning">Bookings</span></h2>
+    <br>
+    <div class="row justify-content-center">
+        {% for booking in bookings %}
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-warning"><strong>Booked the {{ booking.truck.name }} for delivery</strong></h5>
+                    <p class="card-text text-warning">
+                        <strong>Product:</strong> {{ booking.product_name }}<br>
+                        <strong>Weight:</strong> {{ booking.product_weight }} kg<br>
+                        <strong>Pickup:</strong> {{ booking.pickup_state }}<br>
+                        <strong>Destination:</strong> {{ booking.destination_state }}<br>
+                        <strong>Delivery Cost:</strong> &#8358;{{ booking.delivery_cost }}<br>
+                        <strong>Insurance Payment:</strong> &#8358;{{ booking.insurance_payment }}<br>
+                        <strong>Total Cost:</strong> &#8358;{{ booking.total_delivery_cost }}
+                    </p>
+                    {% if booking.delivery_cost > 0 %}
+                        <a href="#" class="btn btn-success">Proceed to Payment</a>
+                    {% else %}
+                        <button class="btn btn-secondary" disabled>Proceed to Payment</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

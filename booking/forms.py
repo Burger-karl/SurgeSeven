@@ -11,13 +11,17 @@ class TruckForm(forms.ModelForm):
             'weight_range': forms.Select(attrs={'class': 'form-control'}),
         }
 
+
 class BookingForm(forms.ModelForm):
     class Meta:
         model = Booking
-        fields = ['product_name', 'product_weight', 'product_value', 'phone_number', 'pickup_state', 'destination_state',]
+        fields = [
+            'product_name', 'product_weight', 'product_value', 
+            'phone_number', 'pickup_state', 'destination_state'
+        ]
         widgets = {
             'product_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter product name'}),
-            'product_weight': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter product weight'}),
+            'product_weight': forms.Select(attrs={'class': 'form-control'}),  # Use Select widget for choices
             'product_value': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter product value'}),
             'phone_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter phone number'}),
             'pickup_state': forms.Select(attrs={'class': 'form-control'}),

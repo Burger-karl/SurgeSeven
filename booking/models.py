@@ -59,6 +59,20 @@ class Booking(models.Model):
     delivery_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     booking_code = models.CharField(max_length=255, null=True, blank=True)
     booking_status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    insurance_payment = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    total_delivery_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.00) 
 
     def __str__(self):
         return f"Booking by {self.client.username} for {self.product_name}"
+
+
+
+class Receipt(models.Model):
+    booking = models.OneToOneField(Booking, on_delete=models.CASCADE)
+    delivery_cost = models.DecimalField(max_digits=10, decimal_places=2)
+    insurance_payment = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    total_delivery_cost = models.DecimalField(max_digits=10, decimal_places=2)
+    generated_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Receipt for Booking {self.booking.id}"
