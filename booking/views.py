@@ -238,22 +238,6 @@ class AdminTruckDetailView(View):
             messages.error(request, 'Invalid action.')
         return redirect(self.success_url)
 
-# Admin - Booking Update Delivery Cost View
-@method_decorator([login_required, user_passes_test(lambda u: u.is_superuser)], name='dispatch')
-class BookingUpdateDeliveryCostView(View):
-    def get(self, request, pk):
-        booking = get_object_or_404(Booking, pk=pk)
-        return render(request, 'booking/update_delivery_cost.html', {'booking': booking})
-
-    def post(self, request, pk):
-        booking = get_object_or_404(Booking, pk=pk)
-        delivery_cost = request.POST.get("delivery_cost")
-        if not delivery_cost:
-            raise PermissionDenied("Delivery cost is required.")
-        booking.delivery_cost = delivery_cost
-        booking.save()
-        return redirect('booking-list')
-
 
 # Admin - Booking List and Update Delivery Cost View
 @method_decorator([login_required, user_passes_test(lambda u: u.is_superuser)], name='dispatch')
