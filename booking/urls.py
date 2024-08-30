@@ -12,6 +12,7 @@ urlpatterns = [
     path('bookings/', BookingListView.as_view(), name='booking_list'),
     path('available-trucks/', AvailableTruckListView.as_view(), name='available_trucks'),
     path('bookings/receipt/<str:booking_code>/', GenerateReceiptView.as_view(), name='generate_receipt'),
+    
 
     # Admin routes
     path('admin/trucks/', AdminTruckListView.as_view(), name='admin_truck_list'),

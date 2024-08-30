@@ -65,63 +65,92 @@ def verify_payment(request, ref):
 
 
 
-@login_required
-def create_booking_payment_view(request, booking_id):
-    booking = get_object_or_404(Booking, id=booking_id)
-    user = request.user
-
-    if booking.payment_completed:
-        messages.error(request, 'Payment already completed for this booking.')
-        return redirect('booking_list', booking_id=booking_id)
-
-    amount = int(booking.delivery_cost * 100)  # Paystack expects amount in kobo
-    email = user.email
-    booking_code = str(uuid.uuid4())
-
-    booking.payment_completed = False
-    booking.booking_code = booking_code
-    booking.save()
-
-    callback_url = request.build_absolute_uri(reverse('verify_booking_payment', kwargs={'ref': booking_code}))
-
-    response = paystack_client.initialize_transaction(email, amount, booking_code, callback_url)
-
-    if response['status']:
-        return redirect(response['data']['authorization_url'])
-    else:
-        booking.booking_code = None
-        booking.save()
-        messages.error(request, 'Payment initialization failed.')
-        return redirect('booking_list', booking_id=booking_id)
-
-
+from django.urls import reverse
+from django.shortcuts import get_object_or_404, redirect
+from django.views.generic import View, TemplateView
+from django.http import JsonResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
+import uuid
 import logging
 
 logger = logging.getLogger(__name__)
 
-@login_required
-def verify_booking_payment_view(request, ref):
-    response = paystack_client.verify_transaction(ref)
+from django.contrib import messages
+from django.shortcuts import redirect
+from django.http import HttpResponseRedirect
 
-    logger.debug('Paystack verification response: %s', response)
+class CreateBookingPaymentView(LoginRequiredMixin, View):
+    def post(self, request, booking_id):
+        booking = get_object_or_404(Booking, id=booking_id)
+        user = request.user
 
-    if response['status'] and response['data']['status'] == 'success':
-        booking = get_object_or_404(Booking, booking_code=ref)
-        booking.payment_completed = True
-        booking.booking_status = 'active'
+        if booking.payment_completed:
+            messages.error(request, 'Payment has already been completed for this booking.')
+            return redirect('booking_list')  # Or the appropriate URL
+
+        amount = int(booking.total_delivery_cost * 100)  # Paystack expects amount in kobo
+        email = user.email
+        booking_code = str(uuid.uuid4())
+
+        booking.payment_completed = False
+        booking.booking_code = booking_code
         booking.save()
 
-        Payment.objects.create(
-            user=request.user,
-            booking=booking,
-            amount=booking.delivery_cost,
-            ref=ref,
-            email=request.user.email,
-            verified=True
-        )
+        callback_url = request.build_absolute_uri(reverse('verify-booking-payment', kwargs={'ref': booking_code}))
 
-        messages.success(request, 'Payment successful')
-        return redirect('booking_list', booking_id=booking.id)
-    else:
-        messages.error(request, 'Payment verification failed.')
-        return redirect('booking_list', booking_id=booking.id)
+        response = paystack_client.initialize_transaction(email, amount, booking_code, callback_url)
+
+        if response['status']:
+            # Redirect to the Paystack authorization URL
+            return HttpResponseRedirect(response['data']['authorization_url'])
+        else:
+            booking.booking_code = None
+            booking.save()
+            messages.error(request, 'Payment initialization Failed.')
+
+
+from django.urls import reverse
+from django.shortcuts import get_object_or_404, redirect
+from django.views.generic import View
+from django.contrib import messages
+from django.http import HttpResponseRedirect
+from booking.models import Receipt
+
+class VerifyBookingPaymentView(LoginRequiredMixin, View):
+    def get(self, request, ref, *args, **kwargs):
+        response = paystack_client.verify_transaction(ref)
+
+        # Log the response for debugging
+        logger.debug('Paystack verification response: %s', response)
+
+        if response['status'] and response['data']['status'] == 'success':
+            booking = get_object_or_404(Booking, booking_code=ref)
+            booking.payment_completed = True
+            booking.booking_status = 'active'
+            booking.save()
+
+            Payment.objects.create(
+                user=request.user,
+                booking=booking,
+                amount=booking.delivery_cost,
+                ref=ref,
+                email=request.user.email,
+                verified=True
+            )
+
+            # Create the receipt
+            Receipt.objects.create(
+                booking=booking,
+                delivery_cost=booking.delivery_cost,
+                insurance_payment=0.00,  # Adjust if necessary
+                total_delivery_cost=booking.total_delivery_cost,
+            )
+
+            # Add a success message
+            messages.success(request, "Payment successful, and truck booked.")
+
+            # Redirect to the receipt page
+            return HttpResponseRedirect(reverse('generate_receipt', kwargs={'booking_code': booking.booking_code}))
+        else:
+            messages.error(request, "Payment verification failed.")
+            return HttpResponseRedirect(reverse('booking-list'))  # Redirect to a safe page

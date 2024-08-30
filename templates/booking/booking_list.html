@@ -36,7 +36,10 @@
                         <strong>Total Cost:</strong> &#8358;{{ booking.total_delivery_cost }}
                     </p>
                     {% if booking.delivery_cost > 0 %}
-                        <a href="#" class="btn btn-success">Proceed to Payment</a>
+                        <form action="{% url 'create-booking-payment' booking.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success">Proceed to Payment</button>
+                        </form>
                     {% else %}
                         <button class="btn btn-secondary" disabled>Proceed to Payment</button>
                     {% endif %}

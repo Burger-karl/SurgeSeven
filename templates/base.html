@@ -68,8 +68,9 @@
                     <li><a class="nav-link scrollto" href="{% url 'about' %}">About</a></li>
                     {% if request.user.user_type == 'client' %}
                     <li class="nav-item dropdown">
-                        <a href="{% url 'available_trucks' %}" class="nav-link dropdown-toggle" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Bookings</a>
+                        <a href="#" class="nav-link dropdown-toggle" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Bookings</a>
                         <ul class="dropdown-menu" id="drop" aria-labelledby="profileDropdown">
+                            <li><a href="{% url 'available_trucks' %}" class="dropdown-item">Create Booking</a></li>
                             <li><a href="{% url 'booking_list' %}" class="dropdown-item">My Bookings</a></li>
                         </ul>
                     </li>

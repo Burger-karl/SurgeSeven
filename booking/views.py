@@ -149,6 +149,7 @@ class GenerateReceiptView(DetailView):
         
         return context
     
+    
 
 
 @method_decorator(login_required, name='dispatch')

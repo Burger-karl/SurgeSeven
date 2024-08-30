@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Receipt for Booking {{ booking.id }}{% endblock title %}
+
+{% block banner-slider %}
+    <section class="breadcrumbs">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>Receipt</h2>
+                <ol>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'booking_list' %}">Bookings</a></li>
+                    <li>Receipt</li>
+                </ol>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block main-content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header text-center">
+                    <a href="#" class="logo me-auto me-lg-0"><img src="{% static 'assets/img/surge-seven-3.png' %}" alt="" style="height: 100px; width: 100px;" class="img-fluid"></a> <br>
+                    <h2 class="text-warning"><strong>Receipt</strong></h3>
+                </div>
+                <br>
+                <div class="card-body text-center">
+                    <h5 class="text-warning"><strong>Booking ID:</strong> {{ booking.id }}</h5>
+                    <p class="text-warning"><strong>Truck:</strong> {{ booking.truck.name }}</p>
+                    <p class="text-warning"><strong>Product:</strong> {{ booking.product_name }}</p>
+                    <p class="text-warning"><strong>Weight:</strong> {{ booking.product_weight }} kg</p>
+                    <p class="text-warning"><strong>Pickup Location:</strong> {{ booking.pickup_state }}</p>
+                    <p class="text-warning"><strong>Destination:</strong> {{ booking.destination_state }}</p>
+                    <hr>
+                    <p class="text-warning"><strong>Delivery Cost:</strong> &#8358;{{ booking.delivery_cost }}</p>
+                    <p class="text-warning"><strong>Insurance Payment:</strong> &#8358;{{ booking.insurance_payment }}</p>
+                    <p class="text-warning"><strong>Total Cost:</strong> &#8358;{{ booking.total_delivery_cost }}</p>
+                    <hr>
+                    <p class="text-warning"><strong>Date of Booking:</strong> {{ booking.created_at|date:"F j, Y, g:i a" }}</p>
+                    <p class="text-warning"><strong>Receipt Generated At:</strong> {{ booking.receipt.generated_at|date:"F j, Y, g:i a" }}</p>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
