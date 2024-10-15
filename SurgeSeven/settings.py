@@ -95,20 +95,26 @@ WSGI_APPLICATION = 'SurgeSeven.wsgi.application'
 
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'WorkDB',
+#         'USER': 'postgres',
+#         'PASSWORD': 'C1h2a3r4l5e6s7',
+#         'HOST': 'localhost'
 #     }
 # }
+
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'WorkDB',
-        'USER': 'postgres',
+        'NAME': 'postgres',
+        'USER': 'postgres.hlxpkydjtduxyjhtknkj',
         'PASSWORD': 'C1h2a3r4l5e6s7',
-        'HOST': 'localhost'
+        'HOST': 'aws-0-eu-central-1.pooler.supabase.com',
+        'PORT': '6543',
     }
 }
+
 
 
 # EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
