@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Delivery History of {{ request.user.username }}{% endblock title %}
+
+{% block banner-slider %}
+<section class="breadcrumbs">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Delivery History</h2>
+            <ol>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li>Delivery History</li>
+            </ol>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block main-content %}
+
+  <h2>Delivery History</h2>
+  <ul>
+    {% for history in delivery_histories %}
+      <li>
+        Booking ID: {{ history.booking.id }} <br>
+        Truck: {{ history.booking.truck.name }} <br>
+        Delivery Date: {{ history.delivery_date }} <br>
+        Status: {{ history.status }}
+      </li>
+    {% empty %}
+      <p>No delivery history found.</p>
+    {% endfor %}
+  </ul>
+
+{% endblock %}

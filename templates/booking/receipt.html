@@ -39,7 +39,7 @@
                     <p class="text-warning"><strong>Insurance Payment:</strong> &#8358;{{ booking.insurance_payment }}</p>
                     <p class="text-warning"><strong>Total Cost:</strong> &#8358;{{ booking.total_delivery_cost }}</p>
                     <hr>
-                    <p class="text-warning"><strong>Date of Booking:</strong> {{ booking.created_at|date:"F j, Y, g:i a" }}</p>
+                    <p class="text-warning"><strong>Date of Booking:</strong> {{ booking.booked_at|date:"F j, Y, g:i a" }}</p>
                     <p class="text-warning"><strong>Receipt Generated At:</strong> {{ booking.receipt.generated_at|date:"F j, Y, g:i a" }}</p>
                 </div>
                 

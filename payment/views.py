@@ -153,4 +153,4 @@ class VerifyBookingPaymentView(LoginRequiredMixin, View):
             return HttpResponseRedirect(reverse('generate_receipt', kwargs={'booking_code': booking.booking_code}))
         else:
             messages.error(request, "Payment verification failed.")
-            return HttpResponseRedirect(reverse('booking-list'))  # Redirect to a safe page
+            return HttpResponseRedirect(reverse('booking_list'))  # Redirect to a safe page

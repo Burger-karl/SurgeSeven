@@ -1,87 +1,73 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from .models import DeliverySchedule, DeliveryHistory, DeliveryDocument
-from booking.models import Booking
-from datetime import datetime
-from .forms import DeliveryScheduleForm
+from django.utils.decorators import method_decorator
+from delivery.models import DeliverySchedule, DeliveryHistory
 
-# Create your views here.
+@method_decorator(login_required, name='dispatch')
+class ActiveDeliveryView(ListView):
+    model = DeliverySchedule
+    template_name = 'delivery/active_delivery_list.html'
+    context_object_name = 'active_deliveries'
 
-@login_required
-def create_delivery_schedule_view(request):
-    if request.method == 'POST':
-        form = DeliveryScheduleForm(request.POST)
-        if form.is_valid():
-            booking_id = form.cleaned_data.get('booking_id')
-            booking = get_object_or_404(Booking, id=booking_id)
+    def get_queryset(self):
+        return DeliverySchedule.objects.filter(
+            client=self.request.user,
+            booking__payment_completed=True
+        ).select_related('booking')
 
-            if booking.booking_status != 'active' or not booking.payment_completed:
-                messages.error(request, 'Booking is not confirmed or paid for.')
-                return redirect('create_delivery_schedule')
 
-            scheduled_date = datetime.now().date()
+@method_decorator(login_required, name='dispatch')
+class DeliveryHistoryView(ListView):
+    model = DeliveryHistory
+    template_name = 'delivery/delivery_history_list.html'
+    context_object_name = 'delivery_histories'
 
-            delivery_schedule = DeliverySchedule.objects.create(
-                booking=booking,
-                scheduled_date=scheduled_date
-            )
-
-            DeliveryHistory.objects.create(
-                booking=booking,
-                delivery_date=scheduled_date,
-                status='pending'
-            )
-
-            messages.success(request, 'Delivery Schedule created successfully.')
-            return redirect('delivery_schedule_list')
-    else:
-        form = DeliveryScheduleForm()
+    def get_queryset(self):
+        # Filter DeliveryHistory by client's bookings that have been delivered
+        return DeliveryHistory.objects.filter(
+            booking__client=self.request.user,
+            status='delivered'
+        ).select_related('booking')
     
-    return render(request, 'delivery/create_schedule.html', {'form': form})
 
 
-@login_required
-def delivery_schedule_list_view(request):
-    user = request.user
-    schedules = DeliverySchedule.objects.filter(booking__client=user, booking__booking_status='active')
-    return render(request, 'delivery/schedule_list.html', {'schedules': schedules})
+# For AdminUser
 
+from django.views.generic import ListView, UpdateView
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.utils.decorators import method_decorator
+from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
+from delivery.models import DeliverySchedule
 
-@login_required
-def delivery_history_view(request):
-    user = request.user
-    histories = DeliveryHistory.objects.filter(booking__client=user, status='delivered')
-    return render(request, 'delivery/history_list.html', {'histories': histories})
+# Custom decorator to check if the user is an admin
+def admin_required(user):
+    return user.is_staff  # or use user.is_superuser if you want only superusers to have access
 
+@method_decorator([login_required, user_passes_test(admin_required)], name='dispatch')
+class AdminDeliveryScheduleListView(ListView):
+    model = DeliverySchedule
+    template_name = 'delivery/admin_delivery_schedule_list.html'
+    context_object_name = 'delivery_schedules'
 
-@login_required
-def delivery_document_list_view(request):
-    documents = DeliveryDocument.objects.filter(booking__client=request.user)
-    return render(request, 'delivery/document_list.html', {'documents': documents})
+    def get_queryset(self):
+        # Filter for deliveries with completed payments
+        return DeliverySchedule.objects.filter(
+            booking__payment_completed=True
+        ).select_related('booking', 'client')
 
+@method_decorator([login_required, user_passes_test(admin_required)], name='dispatch')
+class UpdateDeliveryScheduleStatusView(UpdateView):
+    model = DeliverySchedule
+    fields = ['status']
+    template_name = 'delivery/update_delivery_status.html'
+    context_object_name = 'delivery_schedule'
+    success_url = reverse_lazy('admin_delivery_schedule_list')
 
+    def get_object(self, queryset=None):
+        # Get the specific delivery schedule by its ID
+        return get_object_or_404(DeliverySchedule, pk=self.kwargs['pk'])
 
-# FOR ADMINUSER
-
-# from django.http import HttpResponseForbidden
-
-# @login_required
-# def update_delivery_schedule_status_view(request, pk):
-#     if not request.user.is_superuser:
-#         return HttpResponseForbidden("Only superusers can update delivery status.")
-    
-#     delivery_schedule = get_object_or_404(DeliverySchedule, pk=pk)
-#     delivery_schedule.status = 'delivered'
-#     delivery_schedule.save()
-
-#     # Update the corresponding DeliveryHistory status
-#     delivery_history = DeliveryHistory.objects.filter(booking=delivery_schedule.booking).first()
-#     if delivery_history:
-#         delivery_history.status = 'delivered'
-#         delivery_history.delivery_date = datetime.now().date()  # Update delivery date
-#         delivery_history.save()
-
-#     messages.success(request, 'Delivery schedule status updated to delivered.')
-#     return redirect('delivery_schedule_list')
-
+    def form_valid(self, form):
+        # You can add additional logic here if needed
+        return super().form_valid(form)

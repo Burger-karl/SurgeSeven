@@ -117,11 +117,15 @@ class BookingListView(ListView):
     context_object_name = 'bookings'
 
     def get_queryset(self):
+        queryset = Booking.objects.none()  # Initialize an empty queryset
+
         if self.request.user.user_type == 'client':
-            return Booking.objects.filter(client=self.request.user)
+            queryset = Booking.objects.filter(client=self.request.user, payment_completed=False)
         elif self.request.user.user_type == 'truck_owner':
-            return Booking.objects.filter(truck__owner=self.request.user)
-        return Booking.objects.none()
+            queryset = Booking.objects.filter(truck__owner=self.request.user, payment_completed=False)
+        
+        return queryset
+
 
 # Generate Receipt View
 @method_decorator(login_required, name='dispatch')
