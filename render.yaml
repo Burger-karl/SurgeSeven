@@ -4,4 +4,4 @@ services:
   - type: web
     name: web-service
     env: python
-    staticPublishPath: staticfiles
+    staticPublishPath: static
