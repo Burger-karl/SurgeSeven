@@ -109,6 +109,55 @@ class CreateBookingPaymentView(LoginRequiredMixin, View):
             messages.error(request, 'Payment initialization Failed.')
 
 
+# from django.urls import reverse
+# from django.shortcuts import get_object_or_404, redirect
+# from django.views.generic import View
+# from django.contrib import messages
+# from django.http import HttpResponseRedirect
+# from booking.models import Receipt
+
+# class VerifyBookingPaymentView(LoginRequiredMixin, View):
+#     def get(self, request, ref, *args, **kwargs):
+#         response = paystack_client.verify_transaction(ref)
+
+#         # Log the response for debugging
+#         logger.debug('Paystack verification response: %s', response)
+
+#         if response['status'] and response['data']['status'] == 'success':
+#             booking = get_object_or_404(Booking, booking_code=ref)
+#             booking.payment_completed = True
+#             booking.booking_status = 'active'
+#             booking.save()
+
+#             Payment.objects.create(
+#                 user=request.user,
+#                 booking=booking,
+#                 amount=booking.delivery_cost,
+#                 ref=ref,
+#                 email=request.user.email,
+#                 verified=True
+#             )
+
+#             # Create the receipt
+#             Receipt.objects.create(
+#                 booking=booking,
+#                 delivery_cost=booking.delivery_cost,
+#                 insurance_payment=0.00,  # Adjust if necessary
+#                 total_delivery_cost=booking.total_delivery_cost,
+#             )
+
+#             # Add a success message
+#             messages.success(request, "Payment successful, and truck booked.")
+
+#             # Redirect to the receipt page
+#             return HttpResponseRedirect(reverse('generate_receipt', kwargs={'booking_code': booking.booking_code}))
+#         else:
+#             messages.error(request, "Payment verification failed.")
+#             return HttpResponseRedirect(reverse('booking_list'))  # Redirect to a safe page
+
+
+
+from django.core.mail import send_mail
 from django.urls import reverse
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import View
@@ -139,52 +188,38 @@ class VerifyBookingPaymentView(LoginRequiredMixin, View):
             )
 
             # Create the receipt
-            Receipt.objects.create(
+            receipt = Receipt.objects.create(
                 booking=booking,
                 delivery_cost=booking.delivery_cost,
                 insurance_payment=0.00,  # Adjust if necessary
                 total_delivery_cost=booking.total_delivery_cost,
             )
 
+            # Send email with receipt details
+            subject = "Your Booking Receipt"
+            message = (
+                f"Hello {request.user.username},\n\n"
+                "Thank you for your payment! Here are the details of your booking receipt:\n\n"
+                f"Booking Code: {booking.booking_code}\n"
+                f"Truck Name: {booking.truck.name}\n"
+                f"Product: {booking.product_name}\n"
+                f"Weight: {booking.product_weight}\n"
+                f"Pickup Location: {booking.pickup_state}\n"
+                f"Destination State: {booking.destination_state}\n"
+                f"Delivery Cost: ₦{booking.delivery_cost}\n"
+                f"Insurance Payment: ₦{receipt.insurance_payment}\n"
+                f"Total Cost: ₦{receipt.total_delivery_cost}\n\n"
+                "Thank you for choosing us!\n\n"
+                "Best regards,\nThe Surge Seven Team"
+            )
+            recipient_email = request.user.email
+            send_mail(subject, message, 'no-reply@surge-seven.com', [recipient_email])
+
             # Add a success message
-            messages.success(request, "Payment successful, and truck booked.")
+            messages.success(request, "Payment successful, and truck booked. A receipt has been emailed to you.")
 
             # Redirect to the receipt page
             return HttpResponseRedirect(reverse('generate_receipt', kwargs={'booking_code': booking.booking_code}))
         else:
             messages.error(request, "Payment verification failed.")
             return HttpResponseRedirect(reverse('booking_list'))  # Redirect to a safe page
-
-
-
-
-
-
-from django.shortcuts import get_object_or_404
-from django.views.generic import ListView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
-from booking.models import Receipt
-
-class ReceiptListView(LoginRequiredMixin, ListView):
-    model = Receipt
-    template_name = "booking/receipt_list.html"
-    context_object_name = "receipts"
-
-    def get_queryset(self):
-        # Filter receipts based on the logged-in user’s bookings
-        return Receipt.objects.filter(booking__client=self.request.user).order_by('-generated_at')
-
-    def get(self, request, *args, **kwargs):
-        receipts = self.get_queryset()
-        receipt_list = [
-            {
-                "booking_code": receipt.booking.booking_code,
-                "delivery_cost": receipt.delivery_cost,
-                "insurance_payment": receipt.insurance_payment,
-                "total_delivery_cost": receipt.total_delivery_cost,
-                "created_at": receipt.generated_at,
-            }
-            for receipt in receipts
-        ]
-        return JsonResponse({"receipts": receipt_list}, safe=False)
