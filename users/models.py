@@ -13,7 +13,7 @@ class User(AbstractUser):
         ('admin', 'Admin'),
     )
     user_type = models.CharField(max_length=11, choices=USER_TYPE_CHOICES, default='client')
-
+    is_verified = models.BooleanField(default='False')
     
     email = models.EmailField(unique=True)
 

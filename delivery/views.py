@@ -1,3 +1,36 @@
+# from django.views.generic import ListView
+# from django.contrib.auth.decorators import login_required
+# from django.utils.decorators import method_decorator
+# from delivery.models import DeliverySchedule, DeliveryHistory
+
+# @method_decorator(login_required, name='dispatch')
+# class ActiveDeliveryView(ListView):
+#     model = DeliverySchedule
+#     template_name = 'delivery/active_delivery_list.html'
+#     context_object_name = 'active_deliveries'
+
+#     def get_queryset(self):
+#         return DeliverySchedule.objects.filter(
+#             client=self.request.user,
+#             booking__payment_completed=True
+#         ).select_related('booking')
+
+
+# @method_decorator(login_required, name='dispatch')
+# class DeliveryHistoryView(ListView):
+#     model = DeliveryHistory
+#     template_name = 'delivery/delivery_history_list.html'
+#     context_object_name = 'delivery_histories'
+
+#     def get_queryset(self):
+#         # Filter DeliveryHistory by client's bookings that have been delivered
+#         return DeliveryHistory.objects.filter(
+#             booking__client=self.request.user,
+#             status='delivered'
+#         ).select_related('booking')
+
+
+
 from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -10,10 +43,13 @@ class ActiveDeliveryView(ListView):
     context_object_name = 'active_deliveries'
 
     def get_queryset(self):
+        # Filter only non-delivered deliveries
         return DeliverySchedule.objects.filter(
             client=self.request.user,
-            booking__payment_completed=True
+            booking__payment_completed=True,
+            status__in=['pending', 'in_transit']
         ).select_related('booking')
+
 
 
 @method_decorator(login_required, name='dispatch')
@@ -23,12 +59,11 @@ class DeliveryHistoryView(ListView):
     context_object_name = 'delivery_histories'
 
     def get_queryset(self):
-        # Filter DeliveryHistory by client's bookings that have been delivered
+        # Filter to show only deliveries marked as delivered
         return DeliveryHistory.objects.filter(
-            booking__client=self.request.user,
+            client=self.request.user,
             status='delivered'
         ).select_related('booking')
-    
 
 
 # For AdminUser

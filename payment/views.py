@@ -154,3 +154,37 @@ class VerifyBookingPaymentView(LoginRequiredMixin, View):
         else:
             messages.error(request, "Payment verification failed.")
             return HttpResponseRedirect(reverse('booking_list'))  # Redirect to a safe page
+
+
+
+
+
+
+from django.shortcuts import get_object_or_404
+from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
+from booking.models import Receipt
+
+class ReceiptListView(LoginRequiredMixin, ListView):
+    model = Receipt
+    template_name = "booking/receipt_list.html"
+    context_object_name = "receipts"
+
+    def get_queryset(self):
+        # Filter receipts based on the logged-in user’s bookings
+        return Receipt.objects.filter(booking__client=self.request.user).order_by('-generated_at')
+
+    def get(self, request, *args, **kwargs):
+        receipts = self.get_queryset()
+        receipt_list = [
+            {
+                "booking_code": receipt.booking.booking_code,
+                "delivery_cost": receipt.delivery_cost,
+                "insurance_payment": receipt.insurance_payment,
+                "total_delivery_cost": receipt.total_delivery_cost,
+                "created_at": receipt.generated_at,
+            }
+            for receipt in receipts
+        ]
+        return JsonResponse({"receipts": receipt_list}, safe=False)

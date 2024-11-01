@@ -10,7 +10,7 @@
         <div class="d-flex justify-content-between align-items-center">
             <h2>Bookings</h2>
             <ol>
-            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'client_home' %}">Home</a></li>
             <li>Bookings</li>
             </ol>
         </div>
@@ -18,32 +18,42 @@
         </div>
     </section>
 
-    <!-- ======= Hero Section ======= -->
-    <section id="hero" class="mt-5 d-flex align-items-center">
-        <div class="container position-relative text-center text-lg-start" data-aos="zoom-in" data-aos-delay="100">
-            <div class="row">
-                <div class="col-lg-8">
-                    <h1>Book your delivery <span>Trucks</span></h1>
-                    <h2>Delivering farm produce in wonderful conditions!</h2>
-
-                    <div class="btns">
-                        <!-- <a href="#menu" class="btn-menu animated fadeInUp scrollto">Register</a> -->
-                        <a href="#book-a-table" class="btn-book animated fadeInUp scrollto">Book a Truck</a>
-                    </div>
-                </div>
-        
-                <div class="col-lg-4 d-flex align-items-center justify-content-center position-relative" data-aos="zoom-in" data-aos-delay="200">
-                    <a href="https://www.youtube.com/watch?v=u6BOC7CDUTQ" class="glightbox play-btn"></a>
-                </div>
-
-            </div>
-        </div>
-    </section>
-    <!-- End Hero -->
-
+    
 {% endblock %}
 
 {% block information %}
+
+    <!-- ======= Trucks Section ======= -->
+    <section id="testimonials" class="testimonials section-bg">
+        <div class="container" data-aos="fade-up">
+
+            <div class="section-title">
+                <h2>Available Trucks</h2>
+                <p>Explore our fleet of available trucks</p>
+            </div>
+
+            <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
+                <div class="swiper-wrapper">
+
+                    {% for truck in available_trucks %}
+                    <div class="swiper-slide">
+                        <div class="truck-item">
+                            <img src="{{ truck.image.url }}" class="truck-img" alt="Truck Image">
+                            <h3>{{ truck.weight_range }}</h3>
+                            <a href="{% url 'booking-create' truck.id %}" class="btn btn-primary mt-3">Book Now</a>
+                        </div>
+                    </div><!-- End truck item -->
+                    {% endfor %}
+
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+
+        </div>
+    </section>
+    <!-- ======= End Trucks Section ======= -->
+
+
 
     <!-- ======= Events Section ======= -->
     <section id="events" class="events">
@@ -170,70 +180,6 @@
 {% endblock %}
 
     
-{% block main-content %}
-
-    <!-- ======= Trucks Section ======= -->
-    <section id="testimonials" class="testimonials section-bg">
-        <div class="container" data-aos="fade-up">
-
-            <div class="section-title">
-                <h2>Available Trucks</h2>
-                <p>Explore our fleet of available trucks</p>
-            </div>
-
-            <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
-                <div class="swiper-wrapper">
-
-                    {% for truck in available_trucks %}
-                    <div class="swiper-slide">
-                        <div class="truck-item">
-                            <img src="{{ truck.image.url }}" class="truck-img" alt="Truck Image">
-                            <h3>{{ truck.weight_range }}</h3>
-                            <a href="{% url 'booking-create' truck.id %}" class="btn btn-primary mt-3">Book Now</a>
-                        </div>
-                    </div><!-- End truck item -->
-                    {% endfor %}
-
-                </div>
-                <div class="swiper-pagination"></div>
-            </div>
-
-        </div>
-    </section>
-    <!-- ======= End Trucks Section ======= -->
-
-
-    
-    <!-- ======= About Section ======= -->
-    <section id="about" class="about">
-        <div class="container" data-aos="fade-up">
-
-            <div class="row">
-                <div class="col-lg-6 order-1 order-lg-2" data-aos="zoom-in" data-aos-delay="100">
-                    <div class="about-img">
-                        <img src="https://res.cloudinary.com/dykhctgak/image/upload/v1724589190/about-us_baqxmr.jpg" alt="">
-                    </div>
-                </div>
-        
-                <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1 content">
-                    <h3>We welcome all our clients and truck owners to SurgeSeven</h3>
-                    <p class="fst-italic">
-                        SurgeSeven Logistics offers different services and different healthy foods depepnding on the preference of our customers.
-                    </p>
-                    <ul>
-                        <li><i class="bi bi-check-circle"></i> Cooking and serving of healthy meals to food lovers.</li>
-                        <li><i class="bi bi-check-circle"></i> Delivery service is top notch and always ready to deliver to our customers.</li>
-                        <li><i class="bi bi-check-circle"></i> Burger restaurant also possess spatial environment and well decorated halls which are always ready for use by our customers for their events, be it wedding, birthday parties or custom parties.</li>
-                    </ul>
-                    <p>
-                       SurgeSeven is a grade A logistics with state of the art facilities and a well organized envirionment that enables our highly esteemed customers enjoy thir meals. We are always at your service and strive to do more for our customers.
-                    </p>
-                </div>
-            </div>
-
-        </div>
-    </section>
-    <!--===== End About Section ======-->
 
 
 
@@ -241,15 +187,6 @@
 
 
 
-    <!-- <div class="container mt-5 mb-3">
-        <div class="row my-3">
-            <div class="col-sm-6 offset-sm-3">
 
-                
-            </div>
-        </div>
-    </div> -->
-
-{% endblock main-content %}
 
 

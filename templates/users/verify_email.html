@@ -1,14 +1,19 @@
-{% extends 'base.html' %}
+{% extends 'users/base.html' %}
 {% load static %}
 {% block title %}OTP{% endblock title %}
-    
-{% block main-content %}
 
-    <div class="container mt-5 mb-3">
-        <div class="row my-3">
-            <div class="col-sm-6 offset-sm-3">
+{% block header %}
+Verify your email <span class="text-warning">here!</span>
+{% endblock header %}
+
+    
+{% block content %}
+
+    <div class="p-4 p-md-5 border rounded-3 bg-dark">
+        <div>
+            <div>
                 
-                <form action="" method="post" novalidate class="mt-5 shadow p-5">
+                <form action="" method="post" novalidate>
                     <h3>Enter your OTP</h3>
                     {% csrf_token %}
                     {% for fm in form %}
@@ -28,4 +33,4 @@
         </div>
     </div>
 
-{% endblock main-content %}
+{% endblock content %}

@@ -1,14 +1,18 @@
-{% extends 'base.html' %}
+{% extends 'users/base.html' %}
 {% load static %}
 {% block title %}Login{% endblock title %}
-    
-{% block main-content %}
 
-    <div class="container mt-5 mb-3">
-        <div class="row my-3">
-            <div class="col-sm-6 offset-sm-3">
+{% block header %}
+Login to your <span class="text-warning">SurgeSeven</span> Account
+{% endblock header %}
+    
+{% block content %}
+
+    <div class="p-4 p-md-5 border rounded-3 bg-dark">
+        <div>
+            <div>
                 
-                <form action="" method="POST" novalidate class="shadow mt-5 p-5">
+                <form action="" method="POST" novalidate>
                     <h3>Login</h3>
                     
                     {% csrf_token %}
@@ -41,4 +45,4 @@
         </div>
     </div>
 
-{% endblock main-content %}
+{% endblock content %}

@@ -41,8 +41,8 @@
         <div class="container d-flex justify-content-center justify-content-md-between">
 
             <div class="contact-info d-flex align-items-center">
-                <i class="bi bi-phone d-flex align-items-center"><span>+234 814 393 2604</span></i>
-                <i class="bi bi-clock d-flex align-items-center ms-4"><span> Mon-Sat: 11AM - 23PM</span></i>
+                <i class="bi bi-phone d-flex align-items-center"><span>+234 701 888 4096</span></i>
+                <i class="bi bi-clock d-flex align-items-center ms-4"><span> Mon-Sat: 8AM - 8PM</span></i>
             </div>
 
             <div class="languages d-none d-md-flex align-items-center">
@@ -61,15 +61,15 @@
 
             <!-- <h1 class="logo me-auto me-lg-0"><a href="index.html">Burger</a></h1> -->
             <!-- Uncomment below if you prefer to use an image logo -->
-            <a href="{% url 'home' %}" class="logo me-auto me-lg-0"><img src="{% static 'assets/img/surge-seven-3.png' %}" alt="" class="img-fluid"></a>
+            <a href="#" class="logo me-auto me-lg-0"><img src="{% static 'assets/img/surge-seven-3.png' %}" alt="" class="img-fluid"></a>
 
             <nav id="navbar" class="navbar order-last order-lg-0">
                 
                 <ul>
-                    
-                    <li><a class="nav-link scrollto active" href="{% url 'home' %}">Home</a></li>
-                    <li><a class="nav-link scrollto" href="{% url 'about' %}">About</a></li>
                     {% if request.user.user_type == 'client' %}
+
+                    <li><a class="nav-link scrollto active" href="{% url 'client_home' %}">Home</a></li>
+                    <li><a class="nav-link scrollto" href="{% url 'about' %}">About</a></li>
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Bookings</a>
                         <ul class="dropdown-menu" id="drop" aria-labelledby="profileDropdown">
@@ -82,6 +82,7 @@
                         <ul class="dropdown-menu" id="drop" aria-labelledby="profileDropdown">
                             <li><a href="{% url 'active_deliveries' %}" class="dropdown-item">Active Delivery</a></li>
                             <li><a href="{% url 'delivery_history' %}" class="dropdown-item">Delivery History</a></li>
+                            <li><a href="{% url 'receipt_list' %}" class="dropdown-item">Receipts</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -100,7 +101,8 @@
                     </li>
                     {% elif request.user.user_type == 'truck_owner' %}
                     
-                    
+                    <li><a class="nav-link scrollto active" href="{% url 'truck_owner_home' %}">Home</a></li>
+                    <li><a class="nav-link scrollto" href="{% url 'about' %}">About</a></li>
                     <li class="nav-item dropdown">
                         <a href="" class="nav-link dropdown-toggle" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Trucks</a>
                         <ul class="dropdown-menu" id="drop" aria-labelledby="profileDropdown">
@@ -119,7 +121,7 @@
 
                     {% elif request.user.user_type == 'admin' %}
                     
-                    
+                    <li><a class="nav-link scrollto active" href="{% url 'admin_home' %}">Home</a></li>
                     <li class="nav-item dropdown">
                         <a href="" class="nav-link dropdown-toggle" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Trucks</a>
                         <ul class="dropdown-menu" id="drop" aria-labelledby="profileDropdown">
@@ -192,10 +194,10 @@
                         <div class="footer-info">
                             <h3>SurgeSeven</h3>
                             <p>
-                                Block 4A Ikeja <br>
-                                Shopping Mall, Lagos<br><br>
-                                <strong>Phone:</strong> +234 814 393 2604<br>
-                                <strong>Email:</strong> burgercontactus@gmail.com<br>
+                                Business Throne Plaza <br>
+                                Joseph Gomwalk ST Gudu, Abuja.<br><br>
+                                <strong>Phone:</strong> +234 701 888 4096<br>
+                                <strong>Email:</strong> surgesevens@gmail.com<br>
                             </p>
                             <div class="social-links mt-3">
                                 <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
