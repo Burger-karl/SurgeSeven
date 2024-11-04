@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (
     TruckCreateView, TruckListView, BookingCreateView, BookingListView, AvailableTruckListView,
     GenerateReceiptView,
-    AdminTruckListView, AdminTruckDetailView, BookingUpdateDeliveryCostView
+    AdminTruckListView, AdminTruckDetailView, BookingUpdateDeliveryCostView, BookingWithUpdatedCostView
 )
 
 urlpatterns = [
@@ -19,4 +19,5 @@ urlpatterns = [
     path('admin/trucks/<int:pk>/', AdminTruckDetailView.as_view(), name='admin_truck_detail'),
     path('admin/bookings/', BookingUpdateDeliveryCostView.as_view(), name='admin-booking-list'),
     path('admin/bookings/update/<int:pk>/', BookingUpdateDeliveryCostView.as_view(), name='admin-update-delivery-cost'),
+    path('bookings/updated-cost/', BookingWithUpdatedCostView.as_view(), name='updated_cost_booking_list'),
 ]

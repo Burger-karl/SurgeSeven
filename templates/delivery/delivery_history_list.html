@@ -6,10 +6,10 @@
 <section class="breadcrumbs">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center">
-            <h2>Delivery History</h2>
+            <h5>Delivery History of <strong class="text-warning">{{ request.user.username }}</strong></h5>
             <ol>
-                <li><a href="#">Home</a></li>
-                <li>Delivery History</li>
+                <li><a href="{% url 'client_home' %}">Home</a></li>
+                
             </ol>
         </div>
     </div>
@@ -19,7 +19,7 @@
 {% block main-content %}
 <section class="delivery-history py-4">
     <div class="container">
-        <h2 class="mb-4">Delivery History</h2>
+        
         
         {% if delivery_histories %}
             <div class="row">
@@ -27,12 +27,12 @@
                 <div class="col-md-4 col-12 mb-4">
                     <div class="card shadow-sm">
                         <div class="card-body">
-                            <h5 class="card-title">Booking ID: {{ history.booking.id }}</h5>
-                            <p class="card-text"><strong>Truck:</strong> {{ history.booking.truck.name }}</p>
-                            <p class="card-text"><strong>Delivery Date:</strong> {{ history.delivery_date }}</p>
+                            <h5 class="text-warning card-title">Booking ID: {{ history.booking.id }}</h5>
+                            <p class="text-warning card-text"><strong>Truck:</strong> {{ history.booking.truck.name }}</p>
+                            <p class="text-warning card-text"><strong>Delivery Date:</strong> {{ history.delivery_date }}</p>
                             <p class="card-text">
                                 <strong>Status:</strong> 
-                                <span class="badge {% if history.status == 'pending' %}badge-warning{% elif history.status == 'in_transit' %}badge-info{% elif history.status == 'delivered' %}badge-success{% endif %}">
+                                <span class="text-success bg-white badge {% if history.status == 'pending' %}badge-warning{% elif history.status == 'in_transit' %}badge-info{% elif history.status == 'delivered' %}badge-success{% endif %}">
                                     {{ history.status|capfirst }}
                                 </span>
                             </p>

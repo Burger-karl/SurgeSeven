@@ -6,9 +6,9 @@
 <section class="breadcrumbs">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center">
-            <h2>Active Delivery</h2>
+            <h5>Active Delivery Placed by <strong class="text-warning">{{ request.user.username }}</strong></h5>
             <ol>
-                <li><a href="#">Home</a></li>
+                <li><a href="{% url 'client_home' %}">Home</a></li>
                 <li>Active Delivery</li>
             </ol>
         </div>
@@ -19,20 +19,21 @@
 {% block main-content %}
 <section class="active-deliveries py-4">
     <div class="container">
+        
         {% if active_deliveries %}
             <div class="row">
                 {% for delivery in active_deliveries %}
                 <div class="col-md-4 col-12 mb-4">
                     <div class="card shadow-sm">
                         <div class="card-body text-center">
-                            <h5 class="card-title">{{ delivery.booking.product_name }}</h5>
-                            <p class="card-text"><strong>Destination:</strong> {{ delivery.booking.destination_state }}</p>
-                            <p class="card-text"><strong>Truck:</strong> {{ delivery.booking.truck.name }}</p>
-                            <p class="card-text"><strong>Total Delivery Cost:</strong> ${{ delivery.booking.total_delivery_cost }}</p>
-                            <p class="card-text"><strong>Scheduled Date:</strong> {{ delivery.scheduled_date }}</p>
+                            <h5 class="text-warning card-title"><strong>{{ delivery.booking.product_name }}</strong></h5>
+                            <p class="text-warning card-text"><strong>Destination:</strong> {{ delivery.booking.destination_state }}</p>
+                            <p class="text-warning card-text"><strong>Truck:</strong> {{ delivery.booking.truck.name }}</p>
+                            <p class="text-warning card-text"><strong>Total Delivery Cost:</strong> #{{ delivery.booking.total_delivery_cost }}</p>
+                            <p class="text-warning card-text"><strong>Scheduled Date:</strong> {{ delivery.scheduled_date }}</p>
                             <p class="card-text">
                                 <strong>Status:</strong> 
-                                <span class="badge {% if delivery.status == 'pending' %}badge-warning{% elif delivery.status == 'in_transit' %}badge-info{% elif delivery.status == 'delivered' %}badge-success{% endif %}">
+                                <span class="text-white bg-dark badge {% if delivery.status == 'pending' %}badge-warning{% elif delivery.status == 'in_transit' %}badge-info{% elif delivery.status == 'delivered' %}badge-success{% endif %}">
                                     {{ delivery.status|capfirst }}
                                 </span>
                             </p>

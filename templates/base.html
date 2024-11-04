@@ -126,6 +126,13 @@
                         <ul class="dropdown-menu" id="drop" aria-labelledby="profileDropdown">
                             <li><a href="{% url 'admin_truck_list' %}" class="dropdown-item">Uploaded Trucks</a></li>
                             <li><a href="{% url 'admin-booking-list' %}" class="dropdown-item">Bookings</a></li>
+                            <li><a href="{% url 'updated_cost_booking_list' %}" class="dropdown-item">Updated Bookings</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a href="" class="nav-link dropdown-toggle" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Deliveries</a>
+                        <ul class="dropdown-menu" id="drop" aria-labelledby="profileDropdown">
+                            <li><a href="{% url 'admin_delivery_schedule_list' %}" class="dropdown-item">Delivery Schedules</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -202,7 +209,6 @@
                                 <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
                                 <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
                                 <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-                                <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
                                 <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
                             </div>
                         </div>
@@ -213,8 +219,6 @@
                         <ul>
                             <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
                             <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
                             <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
                         </ul>
                     </div>
@@ -225,8 +229,6 @@
                             <li><i class="bx bx-chevron-right"></i> <a href="#">Booking</a></li>
                             <li><i class="bx bx-chevron-right"></i> <a href="#">Subscribe</a></li>
                             <li><i class="bx bx-chevron-right"></i> <a href="#">Trucks</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">Gallery</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">Team</a></li>
                         </ul>
                     </div>
 
@@ -245,7 +247,7 @@
 
         <div class="container">
             <div class="copyright">
-                &copy; Copyright <strong><span>Burger</span></strong>. All Rights Reserved
+                &copy; Copyright <strong><span>SurgeSeven</span></strong>. All Rights Reserved
             </div>
             <div class="credits">
                 Designed by <a href="#">Charles</a>

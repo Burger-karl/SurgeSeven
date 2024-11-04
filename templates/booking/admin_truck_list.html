@@ -1,23 +1,19 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}Admin Truck List Page{% endblock title %}
-    
+
 {% block banner-slider %}
-
-    <section class="breadcrumbs">
-        <div class="container">
-
+<section class="breadcrumbs">
+    <div class="container">
         <div class="d-flex justify-content-between align-items-center">
             <h2>Truck</h2>
             <ol>
-            <li><a href="#">Home</a></li>
-            <li>Truck</li>
+                <li><a href="#">Home</a></li>
+                <li>Truck</li>
             </ol>
         </div>
-
-        </div>
-    </section>
-
+    </div>
+</section>
 {% endblock %}
 
 {% block main-content %}
@@ -25,7 +21,7 @@
 
 <br>
 
-{% if trucks %}
+{% if page_obj %}
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
@@ -45,7 +41,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for truck in trucks %}
+            {% for truck in page_obj %}
             <tr>
                 <td class="text-warning">{{ truck.name }}</td>
                 <td class="text-warning">{{ truck.owner.username }}</td>
@@ -60,6 +56,25 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <!-- Pagination Controls -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
 {% else %}
     <p>No trucks pending approval.</p>
 {% endif %}

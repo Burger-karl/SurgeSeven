@@ -178,14 +178,117 @@ class AvailableTruckListView(ListView):
 
 # For AdminUser
 
+# from django.shortcuts import get_object_or_404, redirect, render
+# from django.contrib.auth.decorators import login_required, user_passes_test
+# from django.utils.decorators import method_decorator
+# from django.views.generic import ListView, View
+# from django.urls import reverse_lazy
+# from django.contrib import messages
+# from decimal import Decimal
+# from .models import Truck
+# from .forms import TruckApprovalForm
+
+# # Decorator to ensure user is superuser/admin
+# def admin_required(view_func):
+#     decorated_view_func = login_required(user_passes_test(lambda u: u.is_superuser)(view_func))
+#     return decorated_view_func
+
+# @method_decorator(admin_required, name='dispatch')
+# class AdminTruckListView(View):
+#     template_name = 'booking/admin_truck_list.html'
+#     success_url = reverse_lazy('admin_truck_list')
+
+#     def get(self, request):
+#         trucks = Truck.objects.filter(available=False)
+#         form = TruckApprovalForm()
+#         context = {
+#             'trucks': trucks,
+#             'form': form,
+#         }
+#         return render(request, self.template_name, context)
+
+#     def post(self, request):
+#         form = TruckApprovalForm(request.POST)
+#         if form.is_valid():
+#             truck_ids = form.cleaned_data.get('truck_ids')
+#             if truck_ids:
+#                 updated_count = Truck.objects.filter(id__in=truck_ids).update(available=True)
+#                 messages.success(request, f'{updated_count} truck(s) have been approved successfully.')
+#             else:
+#                 messages.warning(request, 'No trucks were selected for approval.')
+#         else:
+#             messages.error(request, 'Invalid form submission.')
+#         return redirect(self.success_url)
+
+# @method_decorator(admin_required, name='dispatch')
+# class AdminTruckDetailView(View):
+#     template_name = 'booking/admin_truck_detail.html'
+#     success_url = reverse_lazy('admin_truck_list')
+
+#     def get(self, request, pk):
+#         truck = get_object_or_404(Truck, pk=pk)
+#         context = {
+#             'truck': truck
+#         }
+#         return render(request, self.template_name, context)
+
+#     def post(self, request, pk):
+#         truck = get_object_or_404(Truck, pk=pk)
+#         action = request.POST.get('action')
+#         if action == 'approve':
+#             truck.available = True
+#             truck.save()
+#             messages.success(request, f'Truck "{truck.name}" has been approved.')
+#         elif action == 'reject':
+#             truck.delete()
+#             messages.success(request, f'Truck "{truck.name}" has been rejected and removed.')
+#         else:
+#             messages.error(request, 'Invalid action.')
+#         return redirect(self.success_url)
+
+
+# # Admin - Booking List and Update Delivery Cost View
+# @method_decorator([login_required, user_passes_test(lambda u: u.is_superuser)], name='dispatch')
+# class BookingUpdateDeliveryCostView(View):
+
+#     def get(self, request, pk=None):
+#         if pk:
+#             # Fetch the specific booking if pk is provided
+#             booking = get_object_or_404(Booking, pk=pk)
+#             return render(request, 'booking/update_delivery_cost.html', {'booking': booking})
+#         else:
+#             # Fetch all bookings to display in the list
+#             bookings = Booking.objects.all().select_related('truck', 'client', 'truck__owner')
+#             return render(request, 'booking/booking_list_admin.html', {'bookings': bookings})
+
+#     def post(self, request, pk):
+#         booking = get_object_or_404(Booking, pk=pk)
+#         delivery_cost = request.POST.get("delivery_cost")
+#         if not delivery_cost or Decimal(delivery_cost) <= 0:
+#             raise PermissionDenied("A valid delivery cost is required.")
+        
+#         delivery_cost = Decimal(delivery_cost)  # Convert to Decimal
+#         booking.delivery_cost = delivery_cost
+#         booking.total_delivery_cost = delivery_cost + booking.insurance_payment
+#         booking.save()
+
+#         return redirect('admin-booking-list')   
+
+
+
+
+
+
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, View
+from django.views.generic import View
 from django.urls import reverse_lazy
 from django.contrib import messages
 from decimal import Decimal
-from .models import Truck
+from django.core.exceptions import PermissionDenied
+from .models import Truck, Booking
 from .forms import TruckApprovalForm
 
 # Decorator to ensure user is superuser/admin
@@ -193,6 +296,7 @@ def admin_required(view_func):
     decorated_view_func = login_required(user_passes_test(lambda u: u.is_superuser)(view_func))
     return decorated_view_func
 
+# Admin Truck List View with Pagination
 @method_decorator(admin_required, name='dispatch')
 class AdminTruckListView(View):
     template_name = 'booking/admin_truck_list.html'
@@ -200,9 +304,13 @@ class AdminTruckListView(View):
 
     def get(self, request):
         trucks = Truck.objects.filter(available=False)
+        paginator = Paginator(trucks, 5)  # Show 5 trucks per page
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
         form = TruckApprovalForm()
         context = {
-            'trucks': trucks,
+            'page_obj': page_obj,
             'form': form,
         }
         return render(request, self.template_name, context)
@@ -219,6 +327,7 @@ class AdminTruckListView(View):
         else:
             messages.error(request, 'Invalid form submission.')
         return redirect(self.success_url)
+    
 
 @method_decorator(admin_required, name='dispatch')
 class AdminTruckDetailView(View):
@@ -247,19 +356,21 @@ class AdminTruckDetailView(View):
         return redirect(self.success_url)
 
 
-# Admin - Booking List and Update Delivery Cost View
-@method_decorator([login_required, user_passes_test(lambda u: u.is_superuser)], name='dispatch')
+# Admin Booking Update Delivery Cost View with Pagination and Filtering
+@method_decorator(admin_required, name='dispatch')
 class BookingUpdateDeliveryCostView(View):
+    template_name = 'booking/booking_list_admin.html'
 
-    def get(self, request, pk=None):
-        if pk:
-            # Fetch the specific booking if pk is provided
-            booking = get_object_or_404(Booking, pk=pk)
-            return render(request, 'booking/update_delivery_cost.html', {'booking': booking})
-        else:
-            # Fetch all bookings to display in the list
-            bookings = Booking.objects.all().select_related('truck', 'client', 'truck__owner')
-            return render(request, 'booking/booking_list_admin.html', {'bookings': bookings})
+    def get(self, request):
+        # Fetch bookings where delivery cost is not set
+        bookings = Booking.objects.filter(delivery_cost__isnull=True).select_related('truck', 'client', 'truck__owner')
+        
+        # Add pagination
+        paginator = Paginator(bookings, 5)  # Show 5 bookings per page
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        return render(request, self.template_name, {'page_obj': page_obj})
 
     def post(self, request, pk):
         booking = get_object_or_404(Booking, pk=pk)
@@ -272,4 +383,21 @@ class BookingUpdateDeliveryCostView(View):
         booking.total_delivery_cost = delivery_cost + booking.insurance_payment
         booking.save()
 
-        return redirect('admin-booking-list')   
+        messages.success(request, "Delivery cost updated successfully.")
+        return redirect('admin-booking-update-delivery-cost')
+
+# View for Bookings with Updated Delivery Costs with Pagination
+@method_decorator(admin_required, name='dispatch')
+class BookingWithUpdatedCostView(View):
+    template_name = 'booking/updated_cost_booking_list.html'
+    
+    def get(self, request):
+        # Fetch bookings where delivery cost is set
+        bookings = Booking.objects.filter(delivery_cost__isnull=False).select_related('truck', 'client', 'truck__owner')
+        
+        # Add pagination
+        paginator = Paginator(bookings, 5)  # Show 5 bookings per page
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        return render(request, self.template_name, {'page_obj': page_obj})

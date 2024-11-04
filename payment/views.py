@@ -79,6 +79,36 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
 
+# class CreateBookingPaymentView(LoginRequiredMixin, View):
+#     def post(self, request, booking_id):
+#         booking = get_object_or_404(Booking, id=booking_id)
+#         user = request.user
+
+#         if booking.payment_completed:
+#             messages.error(request, 'Payment has already been completed for this booking.')
+#             return redirect('booking_list')  # Or the appropriate URL
+
+#         amount = int(booking.total_delivery_cost * 100)  # Paystack expects amount in kobo
+#         email = user.email
+#         booking_code = str(uuid.uuid4())
+
+#         booking.payment_completed = False
+#         booking.booking_code = booking_code
+#         booking.save()
+
+#         callback_url = request.build_absolute_uri(reverse('verify-booking-payment', kwargs={'ref': booking_code}))
+
+#         response = paystack_client.initialize_transaction(email, amount, booking_code, callback_url)
+
+#         if response['status']:
+#             # Redirect to the Paystack authorization URL
+#             return HttpResponseRedirect(response['data']['authorization_url'])
+#         else:
+#             booking.booking_code = None
+#             booking.save()
+#             messages.error(request, 'Payment initialization Failed.')
+
+
 class CreateBookingPaymentView(LoginRequiredMixin, View):
     def post(self, request, booking_id):
         booking = get_object_or_404(Booking, id=booking_id)
@@ -106,7 +136,9 @@ class CreateBookingPaymentView(LoginRequiredMixin, View):
         else:
             booking.booking_code = None
             booking.save()
-            messages.error(request, 'Payment initialization Failed.')
+            messages.error(request, 'Payment initialization failed.')
+            return redirect('booking_list')  # Return a response here to avoid returning None
+
 
 
 # from django.urls import reverse
