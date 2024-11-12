@@ -96,27 +96,27 @@ WSGI_APPLICATION = 'SurgeSeven.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'WorkDB',
-#         'USER': 'postgres',
-#         'PASSWORD': 'C1h2a3r4l5e6s7',
-#         'HOST': 'localhost'
-#     }
-# }
-
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres.hlxpkydjtduxyjhtknkj',
+        'NAME': 'WorkDB',
+        'USER': 'postgres',
         'PASSWORD': 'C1h2a3r4l5e6s7',
-        'HOST': 'aws-0-eu-central-1.pooler.supabase.com',
-        'PORT': '6543',
+        'HOST': 'localhost'
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'postgres',
+#         'USER': 'postgres.hlxpkydjtduxyjhtknkj',
+#         'PASSWORD': 'C1h2a3r4l5e6s7',
+#         'HOST': 'aws-0-eu-central-1.pooler.supabase.com',
+#         'PORT': '6543',
+#     }
+# }
 
 
 
