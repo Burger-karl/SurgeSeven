@@ -10,33 +10,33 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-import environ
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 PAYSTACK_SECRET_KEY = 'sk_test_578e98623123672928132bb40df9ec97f9631cda'
 
-env = environ.Env(
-    # set casting, default value
-    DEBUG=(bool, False)
-)
-
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# environ directory
-environ.Env.read_env(BASE_DIR / '.env')
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
+# Secret key
+SECRET_KEY = os.getenv("SECRET_KEY")
+
+# Debug
+DEBUG = os.getenv("DEBUG", "False") == "True"
+
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-h8byg2#fc!j5$v^2kbta4r+rzt36^yl_^@lh%qjzv*78rrxked'
+# SECRET_KEY = 'django-insecure-h8byg2#fc!j5$v^2kbta4r+rzt36^yl_^@lh%qjzv*78rrxked'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', 'surgeseven.onrender.com']
 
@@ -96,15 +96,35 @@ WSGI_APPLICATION = 'SurgeSeven.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'WorkDB',
+#         'USER': 'postgres',
+#         'PASSWORD': 'C1h2a3r4l5e6s7',
+#         'HOST': 'localhost'
+#     }
+# }
+
+
+# Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'WorkDB',
-        'USER': 'postgres',
-        'PASSWORD': 'C1h2a3r4l5e6s7',
-        'HOST': '102.90.66.32'
+        'NAME': os.getenv("DB_NAME"),
+        'USER': os.getenv("DB_USER"),
+        'PASSWORD': os.getenv("DB_PASSWORD"),
+        'HOST': os.getenv("DB_HOST"),
+        'PORT': os.getenv("DB_PORT"),
     }
 }
+
+# Email configuration
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
+# Paystack configuration
+PAYSTACK_SECRET_KEY = os.getenv("PAYSTACK_SECRET_KEY")
 
 
 # DATABASES = {
