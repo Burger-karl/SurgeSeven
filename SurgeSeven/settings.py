@@ -102,7 +102,7 @@ DATABASES = {
         'NAME': 'WorkDB',
         'USER': 'postgres',
         'PASSWORD': 'C1h2a3r4l5e6s7',
-        'HOST': 'localhost'
+        'HOST': '102.90.66.32'
     }
 }
 
