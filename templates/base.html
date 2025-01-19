@@ -96,7 +96,9 @@
                         <ul class="dropdown-menu" id="drop" aria-labelledby="profileDropdown">
                             <li><a href="{% url 'logout' %}" class="dropdown-item">Logout</a></li>
                             <li><a href="{% url 'profile-create' %}" class="dropdown-item">Profile</a></li>
+                            <li><a href="{% url 'client_dashboard' %}" class="dropdown-item">My Dashboard</a></li>
                         </ul>
+                        
                     </li>
                     {% elif request.user.user_type == 'truck_owner' %}
                     
@@ -114,6 +116,7 @@
                         <ul class="dropdown-menu" id="drop" aria-labelledby="profileDropdown">
                             <li><a href="{% url 'logout' %}" class="dropdown-item">Logout</a></li>
                             <li><a href="{% url 'profile-create' %}" class="dropdown-item">Profile</a></li>
+                            <li><a href="{% url 'truck_owner_dashboard' %}" class="dropdown-item">My Dashboard</a></li>
                         </ul>
                     </li>
                 
@@ -140,6 +143,7 @@
                         <ul class="dropdown-menu" id="drop" aria-labelledby="profileDropdown">
                             <li><a href="{% url 'logout' %}" class="dropdown-item">Logout</a></li>
                             <li><a href="{% url 'profile-create' %}" class="dropdown-item">Profile</a></li>
+                            
                         </ul>
                     </li>
                     {% endif %}
