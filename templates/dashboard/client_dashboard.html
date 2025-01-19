@@ -43,18 +43,11 @@
             </li><!-- End Contact Page Nav -->
       
             <li class="nav-item">
-                <a class="nav-link collapsed" href="{% url 'register' %}">
+                <a class="nav-link collapsed" href="{% url 'about' %}">
                     <i class="bi bi-card-list"></i>
-                    <span>Register</span>
+                    <span>About Us</span>
                 </a>
             </li><!-- End Register Page Nav -->
-      
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="{% url 'login' %}">
-                    <i class="bi bi-box-arrow-in-right"></i>
-                    <span>Login</span>
-                </a>
-            </li><!-- End Login Page Nav -->
       
             <li class="nav-item">
                 <a class="nav-link collapsed" href="{% url 'logout' %}">
@@ -90,7 +83,7 @@
             <div class="row">
 
             <!-- Sales Card -->
-              <div class="col-xxl-4 col-md-6">
+              <div class="col-xxl-6 col-md-6">
                 <div class="card info-card sales-card">
 
                     <div class="filter">
@@ -111,13 +104,13 @@
                             <h5 class="card-title">Plan <span>| {{ subscription.plan }}</span></h5>
 
                             <div class="d-flex align-items-center">
-                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                <!-- <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     <i class="bi bi-cart"></i>
-                                </div>
-                                <div class="ps-3">
-                                    <h6>Start: {{ subscription.start_date }}</h6>
-                                    <h6>End: {{ subscription.end_date }}</h6>
-                                </div>
+                                </div> -->
+                                
+                                    <h5 class="card-title">Start: <span>| {{ subscription.start_date }}</span></h5>
+                                    <h5 class="card-title">End: <span>| {{ subscription.end_date }}</span></h5>
+                                
                             </div>
                         {% else %}
                             <div class="d-flex align-items-center">
@@ -130,7 +123,7 @@
               </div><!-- End Sales Card -->
 
               <!-- Revenue Card -->
-              <div class="col-xxl-4 col-md-6">
+              <div class="col-xxl-6 col-md-6">
                 <div class="card info-card revenue-card">
 
                     <div class="filter">
@@ -269,7 +262,7 @@
                             <img src="{{ history.truck_image.url }}" alt="Truck Image" class="img-fluid rounded" style="width: 50px; height: 50px;">
                           </a>
                         </th>
-                        <td><a href="#" class="text-primary fw-bold">{{ history.booking__product_name }}</a></td>
+                        <td>{{ history.booking__product_name }}</a></td>
                         <td>{{ history.booking__destination_state }}</td>
                         <td>{{ history.booking__insurance_payment }}</td>
                         <td>#{{ history.booking__total_delivery_cost }}</td>
@@ -289,7 +282,7 @@
 
 
         <!-- Right side columns -->
-        <div class="col-lg-4">
+        <div class="col-lg-6">
 
           <!-- Recent Activity -->
           <div class="card">

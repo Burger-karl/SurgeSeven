@@ -25,15 +25,15 @@
         <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
                 <div class="card-body text-center">
-                    <h5 class="card-title text-warning"><strong>Booked the {{ booking.truck.name }} for delivery</strong></h5>
+                    <h4 class="card-title text-warning"><strong>Booked the {{ booking.truck.name }} for delivery</strong></h4><br>
                     <p class="card-text text-warning">
-                        <strong>Product:</strong> {{ booking.product_name }}<br>
-                        <strong>Weight:</strong> {{ booking.product_weight }} kg<br>
-                        <strong>Pickup:</strong> {{ booking.pickup_state }}<br>
-                        <strong>Destination:</strong> {{ booking.destination_state }}<br>
-                        <strong>Delivery Cost:</strong> &#8358;{{ booking.delivery_cost }}<br>
-                        <strong>Insurance Payment:</strong> &#8358;{{ booking.insurance_payment }}<br>
-                        <strong>Total Cost:</strong> &#8358;{{ booking.total_delivery_cost }}
+                        <strong>Product: {{ booking.product_name }}</strong><br>
+                        <strong>Weight: {{ booking.product_weight }} kg</strong><br>
+                        <strong>Pickup: {{ booking.pickup_state }}</strong><br>
+                        <strong>Destination: {{ booking.destination_state }}</strong><br>
+                        <strong>Delivery Cost: &#8358;{{ booking.delivery_cost }}</strong><br>
+                        <strong>Insurance Payment: &#8358;{{ booking.insurance_payment }}</strong><br>
+                        <strong>Total Cost: &#8358;{{ booking.total_delivery_cost }}</strong>
                     </p>
                     {% if booking.delivery_cost > 0 %}
                         <form action="{% url 'create-booking-payment' booking.id %}" method="post">

@@ -24,9 +24,9 @@
             <div class="card mt-5 mb-4">
                 <img src="{{ truck.image.url }}" class="card-img-top" alt="{{ truck.name }}">
                 <div class="card-body">
-                    <h5 class="card-title text-dark">{{ truck.name }}</h5>
-                    <p class="card-text text-dark">Weight Range: {{ truck.get_weight_range_display }}</p>
-                    <p class="card-text text-warning">Available: {{ truck.available|yesno:"Yes,No" }}</p>
+                    <h5 class="card-title text-warning"><strong>{{ truck.name }}</strong></h5>
+                    <p class="card-text text-warning"><strong>Weight Range: {{ truck.get_weight_range_display }}</strong></p>
+                    <p class="card-text text-warning"><strong>Available: {{ truck.available|yesno:"Yes,No" }}</strong></p>
                    
                 </div>
             </div>

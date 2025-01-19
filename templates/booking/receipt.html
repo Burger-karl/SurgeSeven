@@ -28,19 +28,19 @@
                 </div>
                 <br>
                 <div class="card-body text-center">
-                    <h5 class="text-warning"><strong>Booking ID:</strong> {{ booking.id }}</h5>
-                    <p class="text-warning"><strong>Truck:</strong> {{ booking.truck.name }}</p>
-                    <p class="text-warning"><strong>Product:</strong> {{ booking.product_name }}</p>
-                    <p class="text-warning"><strong>Weight:</strong> {{ booking.product_weight }} kg</p>
-                    <p class="text-warning"><strong>Pickup Location:</strong> {{ booking.pickup_state }}</p>
-                    <p class="text-warning"><strong>Destination:</strong> {{ booking.destination_state }}</p>
+                    <h5 class="text-warning"><strong>Booking ID: {{ booking.id }}</strong></h5>
+                    <p class="text-warning"><strong>Truck:</strong> {{ booking.truck.name }}</strong></p>
+                    <p class="text-warning"><strong>Product:</strong> {{ booking.product_name }}</strong></p>
+                    <p class="text-warning"><strong>Weight:</strong> {{ booking.product_weight }} kg</strong></p>
+                    <p class="text-warning"><strong>Pickup Location:</strong> {{ booking.pickup_state }}</strong></p>
+                    <p class="text-warning"><strong>Destination:</strong> {{ booking.destination_state }}</strong></p>
                     <hr>
-                    <p class="text-warning"><strong>Delivery Cost:</strong> &#8358;{{ booking.delivery_cost }}</p>
-                    <p class="text-warning"><strong>Insurance Payment:</strong> &#8358;{{ booking.insurance_payment }}</p>
-                    <p class="text-warning"><strong>Total Cost:</strong> &#8358;{{ booking.total_delivery_cost }}</p>
+                    <p class="text-warning"><strong>Delivery Cost:</strong> &#8358;{{ booking.delivery_cost }}</strong></p>
+                    <p class="text-warning"><strong>Insurance Payment:</strong> &#8358;{{ booking.insurance_payment }}</strong></p>
+                    <p class="text-warning"><strong>Total Cost:</strong> &#8358;{{ booking.total_delivery_cost }}</strong></p>
                     <hr>
-                    <p class="text-warning"><strong>Date of Booking:</strong> {{ booking.booked_at|date:"F j, Y, g:i a" }}</p>
-                    <p class="text-warning"><strong>Receipt Generated At:</strong> {{ booking.receipt.generated_at|date:"F j, Y, g:i a" }}</p>
+                    <p class="text-warning"><strong>Date of Booking:</strong> {{ booking.booked_at|date:"F j, Y, g:i a" }}</strong></p>
+                    <p class="text-warning"><strong>Receipt Generated At:</strong> {{ booking.receipt.generated_at|date:"F j, Y, g:i a" }}</strong></p>
                 </div>
                 
             </div>

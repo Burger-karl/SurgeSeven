@@ -26,13 +26,14 @@
                 {% for history in delivery_histories %}
                 <div class="col-md-4 col-12 mb-4">
                     <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="text-warning card-title">Booking ID: {{ history.booking.id }}</h5>
-                            <p class="text-warning card-text"><strong>Truck:</strong> {{ history.booking.truck.name }}</p>
-                            <p class="text-warning card-text"><strong>Delivery Date:</strong> {{ history.delivery_date }}</p>
+                        <div class="card-body text-center">
+                            <h5 class="text-warning card-title"><strong>Booking: {{ history.booking.product_name }}</strong></h5>
+                            <p class="text-warning card-text"><strong>Truck: {{ history.booking.truck.name }}</strong></p>
+                            <p class="text-warning card-text"><strong>Destination: {{ history.booking.destination_state }}</strong></p>
+                            <p class="text-warning card-text"><strong>Delivery Date: {{ history.delivery_date }}</strong></p>
                             <p class="card-text">
-                                <strong>Status:</strong> 
-                                <span class="text-success bg-white badge {% if history.status == 'pending' %}badge-warning{% elif history.status == 'in_transit' %}badge-info{% elif history.status == 'delivered' %}badge-success{% endif %}">
+                                <strong class="text-warning">Status:</strong> 
+                                <span class="text-white bg-success badge {% if history.status == 'pending' %}badge-warning{% elif history.status == 'in_transit' %}badge-info{% elif history.status == 'delivered' %}badge-success{% endif %}">
                                     {{ history.status|capfirst }}
                                 </span>
                             </p>

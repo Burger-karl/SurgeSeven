@@ -27,13 +27,13 @@
                     <div class="card shadow-sm">
                         <div class="card-body text-center">
                             <h5 class="text-warning card-title"><strong>{{ delivery.booking.product_name }}</strong></h5>
-                            <p class="text-warning card-text"><strong>Destination:</strong> {{ delivery.booking.destination_state }}</p>
-                            <p class="text-warning card-text"><strong>Truck:</strong> {{ delivery.booking.truck.name }}</p>
-                            <p class="text-warning card-text"><strong>Total Delivery Cost:</strong> #{{ delivery.booking.total_delivery_cost }}</p>
-                            <p class="text-warning card-text"><strong>Scheduled Date:</strong> {{ delivery.scheduled_date }}</p>
+                            <p class="text-warning card-text"><strong>Destination: {{ delivery.booking.destination_state }}</strong></p>
+                            <p class="text-warning card-text"><strong>Truck: {{ delivery.booking.truck.name }}</strong></p>
+                            <p class="text-warning card-text"><strong>Total Delivery Cost: #{{ delivery.booking.total_delivery_cost }}</strong></p>
+                            <p class="text-warning card-text"><strong>Scheduled Date: {{ delivery.scheduled_date }}</strong></p>
                             <p class="card-text">
-                                <strong>Status:</strong> 
-                                <span class="text-white bg-dark badge {% if delivery.status == 'pending' %}badge-warning{% elif delivery.status == 'in_transit' %}badge-info{% elif delivery.status == 'delivered' %}badge-success{% endif %}">
+                                <strong class="text-warning">Status:</strong> 
+                                <span class="text-white btn bg-warning badge {% if delivery.status == 'pending' %}badge-warning{% elif delivery.status == 'in_transit' %}badge-info{% elif delivery.status == 'delivered' %}badge-success{% endif %}">
                                     {{ delivery.status|capfirst }}
                                 </span>
                             </p>
