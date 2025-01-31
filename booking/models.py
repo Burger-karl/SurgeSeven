@@ -20,7 +20,7 @@ class Truck(models.Model):
 
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='trucks/')
+    image = models.ImageField(upload_to='trucks/', default='trucks/service-3.jpg', blank=True, null=True)
     weight_range = models.CharField(max_length=15, choices=WEIGHT_CHOICES, default=LIGHTWEIGHT)
     available = models.BooleanField(default=False)
 

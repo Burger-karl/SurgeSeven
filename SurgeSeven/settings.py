@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+import dj_database_url
 
 PAYSTACK_SECRET_KEY = 'sk_test_578e98623123672928132bb40df9ec97f9631cda'
 
@@ -118,6 +119,14 @@ DATABASES = {
         'PORT': os.getenv("DB_PORT"),
     }
 }
+
+
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=os.getenv('DATABASE_URL')
+#     )
+# }
+
 
 # Email configuration
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")

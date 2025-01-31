@@ -43,8 +43,10 @@
                         <li class="text-warning"><strong>End: {{ subscription.end_date }}</strong></li>
                         <strong><li class="text-warning">Features:</li>
                         <ul>
-                            {% for key, value in subscription.plan.features.items %}
-                                <li class="text-warning">{{ key }}: {{ value|yesno:"Enabled,Disabled" }}</li>
+                            {% for feature in subscription.plan.features.all %}
+                                <li class="text-warning"><strong>{{ feature.name }}</strong></li>
+                            {% empty %}
+                                <li class="text-warning">No features available</li>
                             {% endfor %}
                         </ul>
                         <li class="text-warning"><strong>Status: {{ subscription.subscription_status }}</strong></li>

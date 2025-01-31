@@ -320,36 +320,6 @@ class BookingWithUpdatedCostView(View):
 
 
 
-# @method_decorator(admin_required, name='dispatch')
-# class BookingAdminListView(View):
-
-#     def get(self, request, *args, **kwargs):
-#         if not request.user.is_superuser:
-#             raise PermissionDenied("Only superusers can view all bookings.")
-
-#         queryset = Booking.objects.all()
-#         bookings_data = []
-
-#         for booking in queryset:
-#             # Get client subscription details
-#             client_subscription = UserSubscription.objects.filter(
-#                 user=booking.client, subscription_status='active', is_active=True
-#             ).first()
-#             client_subscription_name = client_subscription.plan.name if client_subscription else "No active subscription"
-
-#             # Prepare booking data with client subscription details
-#             booking_data = {
-#                 "booking_details": booking,
-#                 "client_details": {
-#                     "username": booking.client.username,
-#                     "email": booking.client.email,
-#                     "current_subscription_plan": client_subscription_name,
-#                 },
-#             }
-#             bookings_data.append(booking_data)
-
-#         # Render the data into a template
-#         return render(request, "booking/admin_booking_list.html", {"bookings_data": bookings_data})
 
 
 
@@ -362,6 +332,8 @@ from django.http import JsonResponse
 from booking.models import Booking
 from subscriptions.models import UserSubscription, SubscriptionPlan
 from django.db.models import F
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 @method_decorator(admin_required, name='dispatch')
 class BookingAdminListView(View):
@@ -391,8 +363,25 @@ class BookingAdminListView(View):
             }
             bookings_data.append(booking_data)
 
+        # Pagination
+        page = request.GET.get('page', 1)
+        paginator = Paginator(bookings_data, 5)  # Show 10 bookings per page
+
+        try:
+            bookings_data = paginator.page(page)
+        except PageNotAnInteger:
+            bookings_data = paginator.page(1)
+        except EmptyPage:
+            bookings_data = paginator.page(paginator.num_pages)
+
         # Render the data into a template
-        return render(request, "booking/admin_booking_list.html", {"bookings_data": bookings_data})
+        return render(request, "booking/admin_booking_list.html", {
+            "bookings_data": bookings_data
+        })
+
+
+        # # Render the data into a template
+        # return render(request, "booking/admin_booking_list.html", {"bookings_data": bookings_data})
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_superuser:
@@ -439,3 +428,51 @@ class BookingAdminListView(View):
         messages.success(request, f"Delivery cost updated for booking {booking_id}. Total cost: {booking.total_delivery_cost}")
         return redirect("admin-booking-list")  # Replace with your actual URL name
 
+
+
+
+# from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+# @method_decorator(admin_required, name='dispatch')
+# class BookingAdminListView(View):
+
+#     def get(self, request, *args, **kwargs):
+#         if not request.user.is_superuser:
+#             raise PermissionDenied("Only superusers can view all bookings.")
+
+#         queryset = Booking.objects.all()
+#         bookings_data = []
+
+#         for booking in queryset:
+#             # Get client subscription details
+#             client_subscription = UserSubscription.objects.filter(
+#                 user=booking.client, subscription_status='active', is_active=True
+#             ).first()
+#             client_subscription_name = client_subscription.plan.name if client_subscription else "No active subscription"
+
+#             # Prepare booking data with client subscription details
+#             booking_data = {
+#                 "booking_details": booking,
+#                 "client_details": {
+#                     "username": booking.client.username,
+#                     "email": booking.client.email,
+#                     "current_subscription_plan": client_subscription_name,
+#                 },
+#             }
+#             bookings_data.append(booking_data)
+
+#         # Pagination
+#         page = request.GET.get('page', 1)
+#         paginator = Paginator(bookings_data, 5)  # Show 10 bookings per page
+
+#         try:
+#             bookings_data = paginator.page(page)
+#         except PageNotAnInteger:
+#             bookings_data = paginator.page(1)
+#         except EmptyPage:
+#             bookings_data = paginator.page(paginator.num_pages)
+
+#         # Render the data into a template
+#         return render(request, "booking/admin_booking_list.html", {
+#             "bookings_data": bookings_data
+#         })
